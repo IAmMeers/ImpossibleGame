@@ -64,21 +64,11 @@ const PARAMS = {
     BITWIDTH: 512
 };
 
-// for the parallax 
-let scrollSpeed = 2.5;
-
-// Player physics (Credit to Lucas for all of this)
+// PlayerBlock physics
 const PHYSIC_SCALE = 3;
 const GRAVITY = 12.0;
 const PLAYER_JUMP = -800;
 const PLAYER_PHYSICS = {
-    MAX_WALK: 90 * PHYSIC_SCALE,
-    MAX_RUN: 180 * PHYSIC_SCALE,
-    ACC_WALK: 180 * PHYSIC_SCALE,
-    ACC_RUN: 400 * PHYSIC_SCALE,
-    CROUCH_SPEED: 50 * PHYSIC_SCALE,
-    JUMP_HEIGHT: PLAYER_JUMP,
-    DOUBLE_JUMP_HEIGHT: PLAYER_JUMP * .25,
     MAX_FALL: 300 * PHYSIC_SCALE,
     ACC_FALL: PLAYER_JUMP * GRAVITY
 };

@@ -7,6 +7,7 @@ class Player {
         this.velocity = { x: 3.6, y: 0 };
         this.onGround = false;
 
+        this.removeFromWorld = false;
         this.isAlive = true;
 
         this.blockAnimation = new Animator(this.SpriteSheet,
@@ -23,6 +24,10 @@ class Player {
 
         
         if (this.isAlive) {
+            console.log(this.position.x | 0);
+            if (this.position.x > 12000) {
+                console.log("END");
+            }
 
             if (this.position.y > 1000) this.die(); //Die below map 
 
@@ -35,29 +40,29 @@ class Player {
 
             this.position.x += this.velocity.x
 
-            // if (this.game.keys['d']) {
-            //     this.velocity.x = 3;
-            //     this.position.x += 3;
-            // }
-
-            // if (this.game.keys['a']) {
-            //     this.velocity.x = -3;
-            //     this.position.x -= 3;
-            // }
-
 
             // --- PHYSICS -----------------------------------
-                const TICK = this.game.clockTick;
+            const TICK = this.game.clockTick;
+                            
+            this.velocity.y += PLAYER_PHYSICS.MAX_FALL * TICK;
+            this.velocity.y += GRAVITY;
+            this.position.y += this.velocity.y * TICK;
+
+            this.updateBB();
+            this.collisionChecker();
+
+        } else { //Player died
+            if (this.game.keys['r']) {
+
+                this.game.clearEntities();
+                this.game.sceneManager.loadLevel();
                 
-                this.velocity.y += PLAYER_PHYSICS.MAX_FALL * TICK;
-                this.velocity.y += GRAVITY;
-                this.position.y += this.velocity.y * TICK;
-
-
+            }
         }
 
-        this.updateBB();
-        this.collisionChecker();
+        
+
+        
 
     
     }
@@ -75,11 +80,11 @@ class Player {
 
     draw(ctx) {
 
-        if (PARAMS.DEBUG) {
-            //Draw the BB
-            ctx.strokeStyle = 'blue';
-            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
-        }
+        // if (PARAMS.DEBUG) {
+        //     //Draw the BB
+        //     ctx.strokeStyle = 'blue';
+        //     ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
+        // }
 
         this.blockAnimation.drawFrame(
             this.game.clockTick, ctx, 
@@ -122,15 +127,6 @@ class Player {
                 //Other cases for hitting tile
                 if ((entity instanceof Tile)) {
 
-                    // if (this.BB.left <= entity.BB.right
-                    //     && this.BB.bottom > entity.BB.top
-                    //     && this.velocity.x < 0) { //Touching right side
-
-                    //     console.log("Touching right");
-                    //     this.position.x = entity.BB.right;
-                        
-                    // }
-
                     if (this.BB.right >= entity.BB.left
                         && this.BB.bottom > entity.BB.top
                         && this.velocity.x > 0) {  //Touching left side
@@ -151,7 +147,7 @@ class Player {
 
     die() {
         this.isAlive = false;
-        console.log("YOU LOST!");
+        console.log("GAME OVER");
     }
 
 }

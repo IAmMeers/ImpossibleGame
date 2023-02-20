@@ -16,9 +16,6 @@ class GameEngine {
         this.wheel = null;
         this.space = null;
         this.keys = {};
-        this.playerIndex = null;
-
-        
 
         // Options and the Details
         this.options = options || {
@@ -42,7 +39,6 @@ class GameEngine {
     };
 
     startInput() {
-
 
         const getXandY = e => ({
             x: e.clientX - this.ctx.canvas.getBoundingClientRect().left,
@@ -106,6 +102,21 @@ class GameEngine {
  
     };
 
+    clearEntities() {
+        
+        let entitiesCount = this.entities.length;
+        console.log("entitiesCount: " + entitiesCount);
+        for (let i = 0; i < entitiesCount; i++) {
+            let entity = this.entities[i];
+            
+            if (!(entity instanceof SceneManager)) {
+                entity.removeFromWorld = true;
+            }
+        }
+        
+
+    }
+
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -117,6 +128,7 @@ class GameEngine {
     };
 
     update() {
+
         let entitiesCount = this.entities.length;
 
         for (let i = 0; i < entitiesCount; i++) {
@@ -132,8 +144,6 @@ class GameEngine {
                 this.entities.splice(i, 1);
             }
         }
-
-        
 
     };
 
