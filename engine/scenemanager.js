@@ -22,18 +22,18 @@ class SceneManager {
             let bg = ASSET_MANAGER.getAsset("./sprites/background.png");
             this.game.addEntity(new Background(bg));
         }
-
+        
 
     }
 
     createPlayer() {
         let position = {
-            x: 800,
-            y: 350,
+            x: 0,
+            y: 377,
         }
         console.log("Spawning Player at: " + position.x + ", " + position.y);
         let player = new Player(gameEngine, position);
-        this.game.addEntity(player);
+        this.game.addEntityToFront(player);
         this.game.player = player;
     }
 
@@ -62,6 +62,32 @@ class SceneManager {
             width, height);
     }
 
+    showWinScreen(ctx) {
+        let width = 400;
+        let height = 100;
+
+        let offscreenCanvas = document.createElement('canvas');
+        offscreenCanvas.width = width;
+        offscreenCanvas.height = height;
+        let offscreenCtx = offscreenCanvas.getContext('2d');
+        offscreenCtx.imageSmoothingEnabled = false;
+
+
+        offscreenCtx.fillStyle = "White";
+        offscreenCtx.fillRect(0, 0, width, height);
+
+        offscreenCtx.fillStyle = "black";
+        offscreenCtx.font = "bold 25px serif";
+        offscreenCtx.textBaseline = "top";
+        offscreenCtx.fillText("You Won!", width / 4, (height / 2) - 50);
+        offscreenCtx.fillText("Press 'R' to restart", width / 4, height / 2);
+        
+
+        ctx.drawImage(offscreenCanvas,
+            (PARAMS.CANVAS_WIDTH / 2) - (width / 2), (PARAMS.CANVAS_HEIGHT / 2) - (height),
+            width, height);
+    }
+
     update() {
         
         
@@ -81,8 +107,10 @@ class SceneManager {
 
     draw(ctx) {
         if (!this.game.player.isAlive) {
-            console.log("showing death screen");
+            //console.log("showing death screen");
             this.showDeathScreen(ctx);
+        } else if (this.game.player.gameWin) {
+            this.showWinScreen(ctx);
         }
     }
 }

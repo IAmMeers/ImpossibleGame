@@ -3,12 +3,13 @@ class Player {
     constructor(game, position) {
         Object.assign(this, { game, position});
         this.SpriteSheet = ASSET_MANAGER.getAsset("./sprites/Player_Block.png");
-
+        console.log("New Player");
         this.velocity = { x: 3.6, y: 0 };
         this.onGround = false;
 
         this.removeFromWorld = false;
         this.isAlive = true;
+        this.gameWin = false;
 
         this.blockAnimation = new Animator(this.SpriteSheet,
             0, 0,
@@ -17,16 +18,19 @@ class Player {
             0,
             false, true);
 
+        this.updateBB();
+
     }
 
 
     update() {
 
         
-        if (this.isAlive) {
-            console.log(this.position.x | 0);
+        if (this.isAlive && !this.gameWin) {
+            //console.log(this.position.x | 0);
             if (this.position.x > 12000) {
-                console.log("END");
+                console.log("WIN");
+                this.gameWin = true;
             }
 
             if (this.position.y > 1000) this.die(); //Die below map 
@@ -51,16 +55,15 @@ class Player {
             this.updateBB();
             this.collisionChecker();
 
-        } else { //Player died
+        } else { //Game ended from death or win
             if (this.game.keys['r']) {
 
-                this.game.clearEntities();
-                this.game.sceneManager.loadLevel();
+                this.game.restartGame();
+                
                 
             }
         }
 
-        
 
         
 
@@ -80,11 +83,11 @@ class Player {
 
     draw(ctx) {
 
-        // if (PARAMS.DEBUG) {
-        //     //Draw the BB
-        //     ctx.strokeStyle = 'blue';
-        //     ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
-        // }
+        if (PARAMS.DEBUG) {
+            //Draw the BB
+            ctx.strokeStyle = 'blue';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
+        }
 
         this.blockAnimation.drawFrame(
             this.game.clockTick, ctx, 

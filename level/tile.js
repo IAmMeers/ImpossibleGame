@@ -64,10 +64,10 @@ class Tile {
         ctx.drawImage(this.spritesheet, spriteX, spriteY, this.tileWidth, this.tileHeight, this.x - this.game.camera.x, this.y - this.game.camera.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
 
         //Draw Bounding box
-        // if (PARAMS.DEBUG) {
-        //     ctx.strokeStyle = 'blue';
-        //     ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
-        // }
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'blue';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
+        }
     }
 
     generateCollision() {

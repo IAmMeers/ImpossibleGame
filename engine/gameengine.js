@@ -5,6 +5,7 @@ class GameEngine {
         // What you will use to draw
         // Documentation: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
         this.ctx = null;
+        this.sceneManager = null;
 
         // Everything that will be updated and drawn each frame
         this.entities = [];
@@ -98,21 +99,24 @@ class GameEngine {
 
     //Adds entity after index 2
     addEntityToFront(entity) {
-        this.entities.splice(2, 0, entity);
+        this.entities.splice(1, 0, entity);
  
     };
 
-    clearEntities() {
+    restartGame() {
         
         let entitiesCount = this.entities.length;
-        console.log("entitiesCount: " + entitiesCount);
-        for (let i = 0; i < entitiesCount; i++) {
-            let entity = this.entities[i];
-            
+        //console.log("entitiesCount: " + entitiesCount);
+        for (let i = this.entities.length - 1; i >= 0; --i) {
+            let entity = this.entities[i]; 
             if (!(entity instanceof SceneManager)) {
-                entity.removeFromWorld = true;
+                //console.log(this.entities[i]);
+                this.entities.splice(i, 1);
+                //console.log(this.entities);
             }
         }
+
+        this.sceneManager.loadLevel();
         
 
     }
@@ -130,6 +134,7 @@ class GameEngine {
     update() {
 
         let entitiesCount = this.entities.length;
+        //console.log(entitiesCount);
 
         for (let i = 0; i < entitiesCount; i++) {
             let entity = this.entities[i];
@@ -141,7 +146,9 @@ class GameEngine {
 
         for (let i = this.entities.length - 1; i >= 0; --i) {  
             if (this.entities[i].removeFromWorld) {
+                //console.log(this.entities[i]);
                 this.entities.splice(i, 1);
+                //console.log(this.entities);
             }
         }
 
