@@ -28,8 +28,8 @@ class SceneManager {
 
     createPlayer() {
         let position = {
-            x: 0,
-            y: 377,
+            x: 0 * PARAMS.BLOCKWIDTH,
+            y: 357,
         }
         console.log("Spawning Player at: " + position.x + ", " + position.y);
         let player = new Player(gameEngine, position);
@@ -106,6 +106,9 @@ class SceneManager {
     }
 
     draw(ctx) {
+
+        
+
         if (!this.game.player.isAlive) {
             //console.log("showing death screen");
             this.showDeathScreen(ctx);

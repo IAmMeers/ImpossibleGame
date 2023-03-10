@@ -18,7 +18,7 @@ ASSET_MANAGER.downloadAll(() => {
 	gameEngine.addEntityToFront(x);
 	gameEngine.sceneManager = x;
 
-	ctx.imageSmoothingEnabled = false;
+	ctx.imageSmoothingEnabled = true;
 
 
 	gameEngine.init(ctx);

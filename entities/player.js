@@ -4,7 +4,7 @@ class Player {
         Object.assign(this, { game, position});
         this.SpriteSheet = ASSET_MANAGER.getAsset("./sprites/Player_Block.png");
         console.log("New Player");
-        this.velocity = { x: 3.6, y: 0 };
+        this.velocity = { x: 225, y: 0 };
         this.onGround = false;
 
         this.removeFromWorld = false;
@@ -25,10 +25,14 @@ class Player {
 
     update() {
 
+        //console.log(this.position.x);
+
+        const TICK = this.game.clockTick;
+
         
         if (this.isAlive && !this.gameWin) {
             //console.log(this.position.x | 0);
-            if (this.position.x > 12000) {
+            if (this.position.x > 15000) {
                 console.log("WIN");
                 this.gameWin = true;
             }
@@ -36,21 +40,26 @@ class Player {
             if (this.position.y > 1000) this.die(); //Die below map 
 
             // --- CONTROLS ----------------------------------
-            if (this.game.keys[' '] && this.onGround) {
-                this.velocity.y = PLAYER_JUMP;
-                this.onGround = false;
-                
-            }
-
-            this.position.x += this.velocity.x
-
+            if ((this.game.keys[' '] || this.game.mouseDown) && this.onGround) {
+                //if (this.fireSpace) {
+                    this.velocity.y = PLAYER_JUMP;
+                    this.onGround = false;
+                    //this.fireSpace = false;
+                //}
+            } 
+            //else if (!this.game.keys[' ']) {
+            //     this.fireSpace = true;
+            // }
 
             // --- PHYSICS -----------------------------------
-            const TICK = this.game.clockTick;
-                            
-            this.velocity.y += PLAYER_PHYSICS.MAX_FALL * TICK;
-            this.velocity.y += GRAVITY;
-            this.position.y += this.velocity.y * TICK;
+            this.velocity.y += PLAYER_PHYSICS.ACC_FALL * TICK;  
+
+            // max speed calculation for vertical
+            if (this.velocity.y >= PLAYER_PHYSICS.MAX_FALL) this.velocity.y = PLAYER_PHYSICS.MAX_FALL;
+            if (this.velocity.y <= -PLAYER_PHYSICS.MAX_FALL) this.velocity.y = -PLAYER_PHYSICS.MAX_FALL;
+
+            this.position.x += this.velocity.x * TICK * PHYSIC_SCALE;
+            this.position.y += this.velocity.y * TICK * PHYSIC_SCALE;
 
             this.updateBB();
             this.collisionChecker();
@@ -88,6 +97,15 @@ class Player {
             ctx.strokeStyle = 'blue';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
         }
+
+        let blocks = ASSET_MANAGER.getAsset("./sprites/Block_Tileset.png");
+
+        ctx.drawImage(blocks,
+            0, 1536, //source from sheet
+            1920, 512,
+            this.position.x - this.game.camera.x - 512 / 1.5, this.game.camera.y + 589,
+            1920 * PARAMS.SCALE * 3,
+            512 * PARAMS.SCALE);
 
         this.blockAnimation.drawFrame(
             this.game.clockTick, ctx, 

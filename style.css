@@ -16,7 +16,7 @@ canvas {
     margin-right: auto;
     display: block;
     font-size: 20px;
-    background: white; 
+    /* background: white;  */
     border: 10px solid #000000;
     overflow: hidden; 
 }

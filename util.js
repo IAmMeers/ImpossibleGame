@@ -59,18 +59,20 @@ const getDistance = (p1, p2) => {
 
 
 const PARAMS = {
-    DEBUG: true,
+    DEBUG: false,
     SCALE: 1/8,
     BITWIDTH: 512
 };
 
 // PlayerBlock physics
 const PHYSIC_SCALE = 3;
-const GRAVITY = 12.0;
-const PLAYER_JUMP = -800;
+const GRAVITY = -4.5;
+const PLAYER_JUMP = -500;
 const PLAYER_PHYSICS = {
-    MAX_FALL: 300 * PHYSIC_SCALE,
-    ACC_FALL: PLAYER_JUMP * GRAVITY
+    MAX_FALL: 200 * PHYSIC_SCALE,
+    ACC_FALL: PLAYER_JUMP * GRAVITY,
+    JUMP_HEIGHT: PLAYER_JUMP
+    
 };
 
 
